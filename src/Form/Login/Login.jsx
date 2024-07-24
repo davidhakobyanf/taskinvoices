@@ -1,9 +1,8 @@
-import React, {useReducer, useEffect, useContext} from 'react';
+import React, {useReducer, useEffect} from 'react';
 import css from "./Login.module.css";
 import { Button, Form, Input, message } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import {NameContext} from "../../context/NameContext";
 const initialState = {
     loading: false,
     success: false,
@@ -24,9 +23,6 @@ const reducer = (state, action) => {
 };
 
 const Login = ({ form }) => {
-    // const useName = () => useContext(NameContext);
-    //
-    // const { name, setName } = useName();
     const [state, dispatch] = useReducer(reducer, initialState);
     const navigate = useNavigate();
 

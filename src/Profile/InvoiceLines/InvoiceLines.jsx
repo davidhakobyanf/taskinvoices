@@ -11,8 +11,6 @@ const InvoiceLines = ({ selectedInvoiceIds,  setTotalAmountArray }) => {
             try {
                 const response = await axios.get('https://bever-aca-assignment.azurewebsites.net/invoicelines');
                 const invoiceLinesData = response.data.value;
-
-                // Filter invoice lines by selectedInvoiceIds
                 const filteredInvoiceLines = invoiceLinesData.filter(
                     (line) => selectedInvoiceIds.includes(line.InvoiceId)
                 );
@@ -41,12 +39,10 @@ const InvoiceLines = ({ selectedInvoiceIds,  setTotalAmountArray }) => {
             const totals = invoiceLines.reduce((acc, line) => {
                 const productDetails = products.find((prod) => prod.ProductId === line.ProductId) || { Price: 0 };
                 const totalAmount = line.Quantity * productDetails.Price;
-
                 if (!acc[line.InvoiceId]) {
                     acc[line.InvoiceId] = 0;
                 }
                 acc[line.InvoiceId] += totalAmount;
-
                 return acc;
             }, {});
 
@@ -58,13 +54,10 @@ const InvoiceLines = ({ selectedInvoiceIds,  setTotalAmountArray }) => {
         }
     }, [invoiceLines, products]);
 
-    // Map product ID to product details
     const getProductDetails = (productId) => {
         const product = products.find((prod) => prod.ProductId === productId);
         return product ? product : { Name: 'Unknown', Price: 0 };
     };
-
-    // Define columns for the table
     const columns = [
         {
             title: 'Product',

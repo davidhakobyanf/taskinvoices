@@ -3,74 +3,20 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MenuIcon from '@mui/icons-material/Menu';
 import { IoLogOutOutline } from "react-icons/io5";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ name }) => {
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const navigate = useNavigate(); // Initialize useNavigate
-
-    const handleMenuClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
-
+    const navigate = useNavigate();
     const handleLogout = () => {
-        // Remove items from localStorage
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('Name');
         localStorage.removeItem('UserId');
-
-        // Navigate to home page
         navigate('/');
     };
-
-    const menuItems = [
-        {
-            key: '1',
-            label: 'Home',
-        },
-        {
-            key: '2',
-            label: 'About',
-        },
-        {
-            key: '3',
-            label: 'Contact',
-        },
-    ];
-
     return (
         <AppBar position="fixed">
-            <Toolbar style={{ justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={handleMenuClick}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleMenuClose}
-                    >
-                        {menuItems.map((item) => (
-                            <MenuItem key={item.key} onClick={handleMenuClose}>
-                                <Typography textAlign="center">{item.label}</Typography>
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                </div>
+            <Toolbar style={{ justifyContent: 'end' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="body1" component="div" sx={{ mr: 2 }}>
                         Name: {name}

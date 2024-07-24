@@ -1,5 +1,4 @@
-import React, {useContext, useState} from 'react';
-import {NameContext} from "../context/NameContext";
+import React, {useState} from 'react';
 import Navbar from "./Navbar/Navbar";
 import InvoicesTable from "./InvoicesTable/InvoicesTable";
 import InvoiceLines from "./InvoiceLines/InvoiceLines";
@@ -9,7 +8,6 @@ const Profile = () => {
     const [totalAmountArray,setTotalAmountArray] = useState([])
     const NameFromLocalStorage = localStorage.getItem('Name');
     const UserIdFromLocalStorage = localStorage.getItem('UserId');
-    console.log(NameFromLocalStorage, UserIdFromLocalStorage)
 
     return (
         <div>

@@ -17,13 +17,9 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
                     axios.get('https://bever-aca-assignment.azurewebsites.net/products'),
                     axios.get('https://bever-aca-assignment.azurewebsites.net/invoicelines')
                 ]);
-
-                // Filter invoices by UserId
                 const filteredInvoices = invoiceResponse.data.value.filter(
                     invoice => invoice.UserId === userIdFromLocalStorage
                 );
-
-                // Map data with keys for Ant Design Table
                 const dataWithKeys = filteredInvoices.map((invoice, index) => ({
                     key: index,
                     InvoiceId: invoice.InvoiceId,
@@ -31,7 +27,6 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
                     PaidDate: new Date(invoice.PaidDate).toLocaleDateString(),
                     Amount: invoice.Amount,
                 }));
-
                 setData(dataWithKeys);
                 setProducts(productResponse.data.value);
                 setInvoiceLines(invoiceLinesResponse.data.value);
@@ -39,7 +34,6 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
                 console.error('Error fetching data:', error);
             }
         };
-
         fetchData();
     }, [userIdFromLocalStorage]);
 
@@ -56,12 +50,10 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
 
                 return acc;
             }, {});
-
             const totalsArray = Object.keys(totals).map((invoiceId) => ({
                 InvoiceId: invoiceId,
                 AllTotalAmount: totals[invoiceId],
             }));
-
             setTotalAmountArray(totalsArray);
         }
     }, [invoiceLines, products]);
