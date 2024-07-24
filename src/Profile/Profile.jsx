@@ -1,13 +1,22 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {NameContext} from "../context/NameContext";
 import Navbar from "./Navbar/Navbar";
-const Profile = () => {
+import InvoicesTable from "./InvoicesTable/InvoicesTable";
+import InvoiceLines from "./InvoiceLines/InvoiceLines";
 
-    const userNameFromLocalStorage = localStorage.getItem('userName') || name;
+const Profile = () => {
+    const [selectedInvoiceIds, setSelectedInvoiceIds] = useState([]);
+    const [totalAmountArray,setTotalAmountArray] = useState([])
+    const NameFromLocalStorage = localStorage.getItem('Name');
+    const UserIdFromLocalStorage = localStorage.getItem('UserId');
+    console.log(NameFromLocalStorage, UserIdFromLocalStorage)
 
     return (
         <div>
-            <Navbar name={userNameFromLocalStorage}/>
+            <Navbar name={NameFromLocalStorage}/>
+            <InvoicesTable userIdFromLocalStorage={UserIdFromLocalStorage} setSelectedInvoiceIds={setSelectedInvoiceIds}
+                           selectedInvoiceIds={selectedInvoiceIds}  totalAmountArray={totalAmountArray}/>
+            <InvoiceLines selectedInvoiceIds={selectedInvoiceIds} setTotalAmountArray={setTotalAmountArray} />
         </div>
     );
 };

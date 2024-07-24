@@ -57,11 +57,12 @@ const Login = ({ form }) => {
             const data = await response.json();
             const users = data.value;
             const user = users.find(user => user.Name === values.name && user.Password === values.password);
-
+            console.log(user.UserId,'userId')
             if (user) {
                 console.log('Login successful');
                 localStorage.setItem('isLoggedIn', true);
-                localStorage.setItem('userName', values.name);
+                localStorage.setItem('Name', values.name);
+                localStorage.setItem('UserId', user.UserId);
                 dispatch({ type: 'REQUEST_SUCCESS' });
             } else {
                 console.log('Login failed: Invalid credentials');

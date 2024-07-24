@@ -7,10 +7,12 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IoLogOutOutline } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Navbar = ({ name }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -18,6 +20,16 @@ const Navbar = ({ name }) => {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        // Remove items from localStorage
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('Name');
+        localStorage.removeItem('UserId');
+
+        // Navigate to home page
+        navigate('/');
     };
 
     const menuItems = [
@@ -63,7 +75,7 @@ const Navbar = ({ name }) => {
                     <Typography variant="body1" component="div" sx={{ mr: 2 }}>
                         Name: {name}
                     </Typography>
-                    <IconButton color="inherit">
+                    <IconButton color="inherit" onClick={handleLogout}>
                         <IoLogOutOutline style={{ fontSize: '24px' }} />
                     </IconButton>
                 </div>
