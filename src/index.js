@@ -6,17 +6,9 @@ import {
 } from "react-router-dom";
 import "./index.css";
 import FormContainer from "./Form/FormContainer";
-
+import Profile from "./Profile/Profile";
 
 const router = createBrowserRouter([
-    {
-        path: "/client",
-        element: <ClientTable/>,
-    },
-    {
-        path: "/client/:clientId",
-        element: <ClientDashboard/>,
-    },
     {
         path: "/",
         element: <FormContainer/>,
@@ -24,12 +16,12 @@ const router = createBrowserRouter([
     {
         path: "/profile",
         element: <Profile/>,
-        children: [
-            {
-                path: "/profile/dashboard",
-                element: <Dashboard/>,
-            }
-        ]
+        // children: [
+        //     {
+        //         path: "/profile/dashboard",
+        //         element: <Dashboard/>,
+        //     }
+        // ]
     },
 ]);
 
