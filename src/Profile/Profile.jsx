@@ -1,9 +1,13 @@
-import React from 'react';
-
+import React, {useContext} from 'react';
+import {NameContext} from "../context/NameContext";
+import Navbar from "./Navbar/Navbar";
 const Profile = () => {
+
+    const userNameFromLocalStorage = localStorage.getItem('userName') || name;
+
     return (
         <div>
-            Profile
+            <Navbar name={userNameFromLocalStorage}/>
         </div>
     );
 };

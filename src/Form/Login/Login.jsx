@@ -1,9 +1,9 @@
-import React, { useReducer, useEffect } from 'react';
+import React, {useReducer, useEffect, useContext} from 'react';
 import css from "./Login.module.css";
 import { Button, Form, Input, message } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-
+import {NameContext} from "../../context/NameContext";
 const initialState = {
     loading: false,
     success: false,
@@ -24,6 +24,9 @@ const reducer = (state, action) => {
 };
 
 const Login = ({ form }) => {
+    // const useName = () => useContext(NameContext);
+    //
+    // const { name, setName } = useName();
     const [state, dispatch] = useReducer(reducer, initialState);
     const navigate = useNavigate();
 
@@ -53,12 +56,12 @@ const Login = ({ form }) => {
 
             const data = await response.json();
             const users = data.value;
-
             const user = users.find(user => user.Name === values.name && user.Password === values.password);
 
             if (user) {
                 console.log('Login successful');
                 localStorage.setItem('isLoggedIn', true);
+                localStorage.setItem('userName', values.name);
                 dispatch({ type: 'REQUEST_SUCCESS' });
             } else {
                 console.log('Login failed: Invalid credentials');
