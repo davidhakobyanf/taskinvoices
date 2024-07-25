@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/taskinvoices/static/css/main.6ec6ca76.css",
+    "main.js": "/taskinvoices/static/js/main.a22c755a.js",
+    "static/media/face.png": "/taskinvoices/static/media/face.30c9e71d9cb03cdc985e.png",
+    "static/media/tw.png": "/taskinvoices/static/media/tw.b8bce7114cb726d84448.png",
+    "static/media/github.png": "/taskinvoices/static/media/github.c4644da5c2390f4c6c32.png",
+    "static/media/invoicesbackground.jpg": "/taskinvoices/static/media/invoicesbackground.d4f39da1aa44b9f8f31f.jpg",
+    "static/media/link.webp": "/taskinvoices/static/media/link.8517aaf4b65db3ab1923.webp",
+    "index.html": "/taskinvoices/index.html",
+    "main.6ec6ca76.css.map": "/taskinvoices/static/css/main.6ec6ca76.css.map",
+    "main.a22c755a.js.map": "/taskinvoices/static/js/main.a22c755a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6ec6ca76.css",
+    "static/js/main.a22c755a.js"
+  ]
+}
