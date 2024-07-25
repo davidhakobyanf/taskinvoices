@@ -8,9 +8,9 @@ const Content = () => {
     useEffect(() => {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
         if (isLoggedIn === 'true') {
-            navigate('/profile');
+            navigate('/taskinvoices/profile');
         } else {
-            navigate('/');
+            navigate('/taskinvoices');
         }
     }, [navigate]);
 

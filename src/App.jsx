@@ -6,15 +6,15 @@ import Profile from './Profile/Profile';
 
 const router = createBrowserRouter([
     {
-        path: '/',
+        path: '/taskinvoices',
         element: <Content/>,
         children: [
             {
-                path: '/',
+                path: '/taskinvoices',
                 element: <FormContainer/>,
             },
             {
-                path: '/profile',
+                path: '/taskinvoices/profile',
                 element: (
                     <Profile/>
                 ),

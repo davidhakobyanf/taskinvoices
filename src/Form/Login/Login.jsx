@@ -32,7 +32,7 @@ const Login = ({ form }) => {
         }
         if (state.success) {
             message.success({ content: 'Login was successful', key: 'login', duration: 2 });
-            navigate('/profile');
+            navigate('/taskinvoices/profile');
         }
         if (state.error) {
             message.error({ content: state.error, key: 'login', duration: 2 });

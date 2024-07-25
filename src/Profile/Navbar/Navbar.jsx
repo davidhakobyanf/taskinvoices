@@ -12,7 +12,7 @@ const Navbar = ({ name }) => {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('Name');
         localStorage.removeItem('UserId');
-        navigate('/');
+        navigate('/taskinvoices');
     };
     return (
         <AppBar position="fixed">
