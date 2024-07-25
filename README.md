@@ -1,26 +1,26 @@
 # Task Invoices
 
-Welcome to Task Invoices, a simple and effective way to manage your tasks.
+Welcome to Task Invoices, a simple and efficient way to manage invoices related to user tasks.
 
 ## Description
 
-Task Manager is designed to help you manage your tasks efficiently. Here are the key features:
+Task Invoices is designed to help users securely manage and view their invoices. The application includes the following features:
 
-### Manage Your Tasks
-Easily add, update, and delete tasks. Track your progress with visual indicators.
+### Secure Login
+Users can securely log in using their username and password. The application verifies credentials against the "Users" table.
 
-### Stay Organized
-Prioritize your tasks so you can focus on what's most important. Stay on top of your workload.
+### Invoice Management
+After logging in, users can view their specific invoices. The "Total Amount" column in the "Invoices" table is calculated as the sum of the "total amounts" from related invoice lines.
 
-### Connect with Us
-Have questions or feedback? Contact us via our contact page. We're here to help!
+### Detailed Invoice Information
+Users can select an invoice to view detailed invoice lines associated with that invoice. This feature helps in understanding the breakdown of the total amount.
 
 ## Project Structure
 
-The project is organized into two main directories:
+The project consists of two main pages:
 
-1. **client**: Contains the client-side code built using the React library.
-2. **server**: Contains the server-side code which provides a REST API using Node.js and MongoDB.
+1. **Login Page**: Allows users to log in using their username and password.
+2. **Invoice Page**: Displays invoices related to the logged-in user and detailed invoice lines upon selection.
 
 ## Getting Started
 
@@ -28,52 +28,43 @@ To get started with the project, follow these steps:
 
 ### Prerequisites
 
-Make sure you have the following installed:
-- Node.js
-- npm
-- MongoDB
+Ensure you have the following installed:
+- A modern web browser (e.g., Chrome, Firefox, Safari)
+- An active internet connection
 
 ### Installation
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/davidhakobyanf/TaskManager.git
+    git clone https://github.com/davidhakobyanf/taskinvoices.git
     ```
 2. Navigate to the project directory:
     ```sh
-    cd TaskManager
+    cd taskinvoices
     ```
 
-### Running the Client
+### Running the Application
 
-1. Open a terminal and navigate to the client directory:
+1. Navigate to the project directory:
     ```sh
-    cd client
+    cd taskinvoices
     ```
 2. Install the dependencies:
     ```sh
     npm install
     ```
-3. Start the client:
+3. Start the application:
     ```sh
     npm start
     ```
+4. Open your web browser and go to `http://localhost:3000`. The login screen will appear. Enter your username and password to log in.
 
-### Running the Server
+## Data Sources
 
-1. Open a second terminal and navigate to the server directory:
-    ```sh
-    cd TaskManager/server
-    ```
-2. Install the dependencies:
-    ```sh
-    npm install
-    ```
-3. Start the server:
-    ```sh
-    npm run dev
-    ```
+The application retrieves data from the following OData endpoints:
 
-## Contact
+- **Users**: [Users Data](https://bever-aca-assignment.azurewebsites.net/users)
+- **Products**: [Products Data](https://bever-aca-assignment.azurewebsites.net/products)
+- **Invoices**: [Invoices Data](https://bever-aca-assignment.azurewebsites.net/invoices)
+- **Invoice Lines**: [Invoice Lines Data](https://bever-aca-assignment.azurewebsites.net/invoicelines)
 
-If you have any questions or feedback, please feel free to reach out via our contact page. We're here to help!
