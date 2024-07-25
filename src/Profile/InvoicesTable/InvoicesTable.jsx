@@ -1,22 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Radio, Divider } from 'antd';
+import React, { useEffect, useReducer } from 'react';
+import { Table, Radio, Divider, message } from 'antd';
 import axios from 'axios';
 
+const initialState = {
+    data: [],
+    products: [],
+    invoiceLines: [],
+    totalAmountArray: [],
+    selectionType: 'checkbox',
+};
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return { ...state, data: action.payload };
+        case 'SET_PRODUCTS':
+            return { ...state, products: action.payload };
+        case 'SET_INVOICE_LINES':
+            return { ...state, invoiceLines: action.payload };
+        case 'SET_TOTAL_AMOUNT_ARRAY':
+            return { ...state, totalAmountArray: action.payload };
+        case 'SET_SELECTION_TYPE':
+            return { ...state, selectionType: action.payload };
+        default:
+            return state;
+    }
+};
+
 const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelectedInvoiceIds }) => {
-    const [data, setData] = useState([]);
-    const [products, setProducts] = useState([]);
-    const [invoiceLines, setInvoiceLines] = useState([]);
-    const [totalAmountArray, setTotalAmountArray] = useState([]);
-    const [selectionType, setSelectionType] = useState('checkbox');
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
         const fetchData = async () => {
+            message.loading({ content: 'Loading...', key: 'fetching' });
             try {
                 const [invoiceResponse, productResponse, invoiceLinesResponse] = await Promise.all([
                     axios.get('https://bever-aca-assignment.azurewebsites.net/invoices'),
                     axios.get('https://bever-aca-assignment.azurewebsites.net/products'),
                     axios.get('https://bever-aca-assignment.azurewebsites.net/invoicelines')
                 ]);
+
                 const filteredInvoices = invoiceResponse.data.value.filter(
                     invoice => invoice.UserId === userIdFromLocalStorage
                 );
@@ -27,10 +50,14 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
                     PaidDate: new Date(invoice.PaidDate).toLocaleDateString(),
                     Amount: invoice.Amount,
                 }));
-                setData(dataWithKeys);
-                setProducts(productResponse.data.value);
-                setInvoiceLines(invoiceLinesResponse.data.value);
+
+                dispatch({ type: 'SET_DATA', payload: dataWithKeys });
+                dispatch({ type: 'SET_PRODUCTS', payload: productResponse.data.value });
+                dispatch({ type: 'SET_INVOICE_LINES', payload: invoiceLinesResponse.data.value });
+
+                message.success({ content: 'Data loaded successfully!', key: 'fetching', duration: 2 });
             } catch (error) {
+                message.error({ content: 'Error fetching data', key: 'fetching', duration: 2 });
                 console.error('Error fetching data:', error);
             }
         };
@@ -38,9 +65,9 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
     }, [userIdFromLocalStorage]);
 
     useEffect(() => {
-        if (invoiceLines.length && products.length) {
-            const totals = invoiceLines.reduce((acc, line) => {
-                const productDetails = products.find((prod) => prod.ProductId === line.ProductId) || { Price: 0 };
+        if (state.invoiceLines.length && state.products.length) {
+            const totals = state.invoiceLines.reduce((acc, line) => {
+                const productDetails = state.products.find((prod) => prod.ProductId === line.ProductId) || { Price: 0 };
                 const totalAmount = line.Quantity * productDetails.Price;
 
                 if (!acc[line.InvoiceId]) {
@@ -50,16 +77,18 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
 
                 return acc;
             }, {});
+
             const totalsArray = Object.keys(totals).map((invoiceId) => ({
                 InvoiceId: invoiceId,
                 AllTotalAmount: totals[invoiceId],
             }));
-            setTotalAmountArray(totalsArray);
+
+            dispatch({ type: 'SET_TOTAL_AMOUNT_ARRAY', payload: totalsArray });
         }
-    }, [invoiceLines, products]);
+    }, [state.invoiceLines, state.products]);
 
     const getTotalAmount = (invoiceId) => {
-        const total = totalAmountArray.find(item => item.InvoiceId === invoiceId);
+        const total = state.totalAmountArray.find(item => item.InvoiceId === invoiceId);
         return total ? total.AllTotalAmount : 'N/A';
     };
 
@@ -90,8 +119,8 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
     return (
         <div>
             <Radio.Group
-                onChange={({ target: { value } }) => setSelectionType(value)}
-                value={selectionType}
+                onChange={({ target: { value } }) => dispatch({ type: 'SET_SELECTION_TYPE', payload: value })}
+                value={state.selectionType}
             >
                 <Radio value="checkbox">Checkbox</Radio>
                 <Radio value="radio">Radio</Radio>
@@ -101,11 +130,11 @@ const InvoicesTable = ({ userIdFromLocalStorage, selectedInvoiceIds, setSelected
 
             <Table
                 rowSelection={{
-                    type: selectionType,
+                    type: state.selectionType,
                     ...rowSelection,
                 }}
                 columns={columns}
-                dataSource={data}
+                dataSource={state.data}
                 rowKey="InvoiceId"
                 title={() => 'Invoices'}
             />

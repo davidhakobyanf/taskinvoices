@@ -1,13 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import React, { useEffect, useReducer } from 'react';
+import { Table, message } from 'antd';
 import axios from 'axios';
 
-const InvoiceLines = ({ selectedInvoiceIds,  setTotalAmountArray }) => {
-    const [invoiceLines, setInvoiceLines] = useState([]);
-    const [products, setProducts] = useState([]);
+const initialState = {
+    invoiceLines: [],
+    products: [],
+    totalsArray: [],
+};
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_INVOICE_LINES':
+            return { ...state, invoiceLines: action.payload };
+        case 'SET_PRODUCTS':
+            return { ...state, products: action.payload };
+        case 'SET_TOTALS_ARRAY':
+            return { ...state, totalsArray: action.payload };
+        default:
+            return state;
+    }
+};
+
+const InvoiceLines = ({ selectedInvoiceIds, setTotalAmountArray }) => {
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
         const fetchInvoiceLines = async () => {
+            message.loading({ content: 'Loading invoice lines...', key: 'fetchingInvoiceLines' });
             try {
                 const response = await axios.get('https://bever-aca-assignment.azurewebsites.net/invoicelines');
                 const invoiceLinesData = response.data.value;
@@ -15,17 +34,22 @@ const InvoiceLines = ({ selectedInvoiceIds,  setTotalAmountArray }) => {
                     (line) => selectedInvoiceIds.includes(line.InvoiceId)
                 );
 
-                setInvoiceLines(filteredInvoiceLines);
+                dispatch({ type: 'SET_INVOICE_LINES', payload: filteredInvoiceLines });
+                message.success({ content: 'Invoice lines loaded successfully!', key: 'fetchingInvoiceLines', duration: 2 });
             } catch (error) {
+                message.error({ content: 'Error fetching invoice lines', key: 'fetchingInvoiceLines', duration: 2 });
                 console.error('Error fetching invoice lines:', error);
             }
         };
 
         const fetchProducts = async () => {
+            message.loading({ content: 'Loading products...', key: 'fetchingProducts' });
             try {
                 const response = await axios.get('https://bever-aca-assignment.azurewebsites.net/products');
-                setProducts(response.data.value);
+                dispatch({ type: 'SET_PRODUCTS', payload: response.data.value });
+                message.success({ content: 'Products loaded successfully!', key: 'fetchingProducts', duration: 2 });
             } catch (error) {
+                message.error({ content: 'Error fetching products', key: 'fetchingProducts', duration: 2 });
                 console.error('Error fetching products:', error);
             }
         };
@@ -35,9 +59,9 @@ const InvoiceLines = ({ selectedInvoiceIds,  setTotalAmountArray }) => {
     }, [selectedInvoiceIds]);
 
     useEffect(() => {
-        if (invoiceLines.length && products.length) {
-            const totals = invoiceLines.reduce((acc, line) => {
-                const productDetails = products.find((prod) => prod.ProductId === line.ProductId) || { Price: 0 };
+        if (state.invoiceLines.length && state.products.length) {
+            const totals = state.invoiceLines.reduce((acc, line) => {
+                const productDetails = state.products.find((prod) => prod.ProductId === line.ProductId) || { Price: 0 };
                 const totalAmount = line.Quantity * productDetails.Price;
                 if (!acc[line.InvoiceId]) {
                     acc[line.InvoiceId] = 0;
@@ -50,14 +74,17 @@ const InvoiceLines = ({ selectedInvoiceIds,  setTotalAmountArray }) => {
                 InvoiceId: invoiceId,
                 AllTotalAmount: totals[invoiceId],
             }));
-            setTotalAmountArray(totalsArray)
+
+            dispatch({ type: 'SET_TOTALS_ARRAY', payload: totalsArray });
+            setTotalAmountArray(totalsArray);
         }
-    }, [invoiceLines, products]);
+    }, [state.invoiceLines, state.products, setTotalAmountArray]);
 
     const getProductDetails = (productId) => {
-        const product = products.find((prod) => prod.ProductId === productId);
+        const product = state.products.find((prod) => prod.ProductId === productId);
         return product ? product : { Name: 'Unknown', Price: 0 };
     };
+
     const columns = [
         {
             title: 'Product',
@@ -84,7 +111,7 @@ const InvoiceLines = ({ selectedInvoiceIds,  setTotalAmountArray }) => {
     return (
         <Table
             columns={columns}
-            dataSource={invoiceLines}
+            dataSource={state.invoiceLines}
             rowKey="InvoiceLineId"
             title={() => 'Invoice Lines'}
         />
