@@ -5,13 +5,16 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { IoLogOutOutline } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import {useCookies} from "react-cookie";
 
 const Navbar = ({ name }) => {
     const navigate = useNavigate();
+    const [, , removeCookie] = useCookies(['UserId']);
+
     const handleLogout = () => {
-        localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('Name');
         localStorage.removeItem('UserId');
+        removeCookie('UserId', { path: '/' });
         navigate('/taskinvoices');
     };
     return (

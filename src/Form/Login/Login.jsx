@@ -3,6 +3,7 @@ import css from "./Login.module.css";
 import { Button, Form, Input, message } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import {useCookies} from "react-cookie";
 const initialState = {
     loading: false,
     success: false,
@@ -24,6 +25,7 @@ const reducer = (state, action) => {
 
 const Login = ({ form }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [cookies, setCookie] = useCookies(['UserId']);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -56,7 +58,7 @@ const Login = ({ form }) => {
             console.log(user.UserId,'userId')
             if (user) {
                 console.log('Login successful');
-                localStorage.setItem('isLoggedIn', true);
+                setCookie('UserId', user.UserId, { path: '/' });
                 localStorage.setItem('Name', values.name);
                 localStorage.setItem('UserId', user.UserId);
                 dispatch({ type: 'REQUEST_SUCCESS' });

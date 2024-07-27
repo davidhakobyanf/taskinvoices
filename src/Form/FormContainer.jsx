@@ -3,19 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { Form as AntdForm } from 'antd';
 import css from './FormContainer.module.css';
 import Login from './Login/Login';
+import {useCookies} from "react-cookie";
 
 const FormContainer = () => {
     const [form] = AntdForm.useForm();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        if (isLoggedIn === 'true') {
-            navigate('/taskinvoices/profile');
-        } else {
-            navigate('/taskinvoices');
-        }
-    }, [navigate]);
+    // const navigate = useNavigate();
+    // const [cookies] = useCookies(['UserId']);
+    //
+    // useEffect(() => {
+    //     const userId = cookies.UserId;
+    //     if (userId) {
+    //         navigate('/taskinvoices/profile');
+    //     } else {
+    //         navigate('/taskinvoices');
+    //     }
+    // }, [cookies, navigate]);
 
     return (
         <div className={css.container}>
